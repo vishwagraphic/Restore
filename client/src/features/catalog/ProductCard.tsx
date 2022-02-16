@@ -7,6 +7,7 @@ import {
   CardMedia,
   Typography,
   CardHeader,
+  Link,
 } from "@mui/material";
 import { Product } from "../../models/products";
 
@@ -57,7 +58,9 @@ export default function ProductCard({ product }: Props) {
       </CardContent>
       <CardActions>
         <Button size="small">Add to cart</Button>
-        <Button size="small">View</Button>
+        <Button component={Link} href={`/catalog/${product.id}`} size="small">
+          View
+        </Button>
       </CardActions>
     </Card>
   );
