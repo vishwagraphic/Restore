@@ -1,6 +1,4 @@
 import {
-  Backdrop,
-  CircularProgress,
   Divider,
   Grid,
   Table,
@@ -10,9 +8,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import agent from "../../api/agent";
+import NotFound from "../../errors/NotFound";
+import LoadingComponent from "../../layout/LoadingComponent";
 import { Product } from "../../models/products";
 
 export default function ProductDetails() {
@@ -20,28 +20,15 @@ export default function ProductDetails() {
   const [product, setProduct] = useState<Product | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/products/${id}`)
-      .then((response) => setProduct(response.data))
+    agent.Catalog.details(id !== undefined ? parseInt(id) : 0)
+      .then((response) => setProduct(response))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading)
-    return (
-      <Backdrop
-        sx={{
-          color: "#fff",
-          zIndex: (theme: { zIndex: { drawer: number } }) =>
-            theme.zIndex.drawer + 1,
-        }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    );
+  if (loading) return <LoadingComponent message="Loading details..." />;
 
-  if (!product) return <Typography variant="h3">Product not found</Typography>;
+  if (!product) return <NotFound />;
 
   return (
     <Grid container spacing={6}>
