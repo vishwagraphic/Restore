@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Avatar,
   Button,
@@ -9,23 +10,30 @@ import {
   CardHeader,
   Link,
 } from "@mui/material";
+import { useState } from "react";
+import agent from "../../api/agent";
+import { useStoreContext } from "../../context/StoreContext";
 import { Product } from "../../models/products";
+import { currencyFormat } from "../../utils/utils";
 
 interface Props {
   product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
-  return (
-    /*  <ListItem key={product.id}>
-    <ListItemAvatar>
-        <Avatar src={product.pictureUrl} />
-    </ListItemAvatar>
-    <ListItemText>
-    {product.name} - { product.price}
-    </ListItemText>
-      </ListItem> */
+  const [loading, setLoading] = useState(false);
+  const setBasket = useStoreContext()?.setBasket;
 
+  const handleItem = (productId: number) => {
+    if (setBasket) {
+      setLoading(true);
+      agent.Basket.addItem(productId)
+        .then((basket) => setBasket(basket))
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
+    }
+  };
+  return (
     <Card>
       <CardHeader
         avatar={
@@ -50,14 +58,20 @@ export default function ProductCard({ product }: Props) {
       />
       <CardContent>
         <Typography gutterBottom color="secondary" variant="h5" component="div">
-          ${(product.price / 100)?.toFixed(2)}
+          {currencyFormat(product.price)}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {product.brand} / {product.type}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Add to cart</Button>
+        <LoadingButton
+          loading={loading}
+          size="small"
+          onClick={() => handleItem(product.id)}
+        >
+          Add to cart
+        </LoadingButton>
         <Button component={Link} href={`/catalog/${product.id}`} size="small">
           View
         </Button>

@@ -10,8 +10,9 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React from "react";
+import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { useStoreContext } from "../context/StoreContext";
 
 const midLinks = [
   { title: "Catalog", path: "/catalog" },
@@ -40,6 +41,9 @@ export default function Header(props: {
   setDarkMode: (val: boolean) => void;
   darkMode: boolean;
 }) {
+  const basket = useStoreContext()?.basket;
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+
   const { setDarkMode, darkMode } = props;
   const handleToggle = () => {
     darkMode ? setDarkMode(false) : setDarkMode(true);
@@ -78,8 +82,13 @@ export default function Header(props: {
         </Box>
 
         <Box display="flex" alignItems="center">
-          <IconButton size="large" sx={{ color: "inherit" }}>
-            <Badge badgeContent={4} color="secondary">
+          <IconButton
+            component={Link}
+            to="/basket"
+            size="large"
+            sx={{ color: "inherit" }}
+          >
+            <Badge badgeContent={itemCount} color="secondary">
               <ShoppingCart />
             </Badge>
           </IconButton>

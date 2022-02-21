@@ -4,6 +4,7 @@ import App from "./layout/App";
 import reportWebVitals from "./reportWebVitals";
 import { Router } from "react-router-dom";
 import { history } from "./history/history";
+import { StoreProvider } from "./context/StoreContext";
 
 const CustomRouter = (props: any) => {
   const { history } = props;
@@ -30,7 +31,9 @@ const CustomRouter = (props: any) => {
 ReactDOM.render(
   <React.StrictMode>
     <CustomRouter history={history}>
-      <App />
+      <StoreProvider>
+        <App />
+      </StoreProvider>
     </CustomRouter>
   </React.StrictMode>,
   document.getElementById("root")
