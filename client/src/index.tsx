@@ -5,6 +5,8 @@ import reportWebVitals from "./reportWebVitals";
 import { Router } from "react-router-dom";
 import { history } from "./history/history";
 import { StoreProvider } from "./context/StoreContext";
+import { Provider } from "react-redux";
+import { store } from "./store/counterStore";
 
 const CustomRouter = (props: any) => {
   const { history } = props;
@@ -32,7 +34,9 @@ ReactDOM.render(
   <React.StrictMode>
     <CustomRouter history={history}>
       <StoreProvider>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </StoreProvider>
     </CustomRouter>
   </React.StrictMode>,

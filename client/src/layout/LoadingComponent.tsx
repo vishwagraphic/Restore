@@ -1,4 +1,4 @@
-import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
+import { Backdrop, CircularProgress, Typography } from "@mui/material";
 
 export default function LoadingComponent({ message }: { message: string }) {
   return (

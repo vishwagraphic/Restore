@@ -7,11 +7,11 @@ import {
   TableCell,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useStoreContext } from "../../context/StoreContext";
+import { useAppSelector } from "../../store/counterStore";
 import { currencyFormat } from "../../utils/utils";
 
 export default function BasketSummary() {
-  const basket = useStoreContext()?.basket;
+  const { basket } = useAppSelector((state) => state.basket);
   const [subTotal, setSubTotal] = useState<number>(0);
   const [deliveryFee, setDeliveryFee] = useState<number>(0);
 

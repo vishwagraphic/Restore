@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import { useStoreContext } from "../context/StoreContext";
+import { useAppSelector } from "../store/counterStore";
 
 const midLinks = [
   { title: "Catalog", path: "/catalog" },
@@ -41,7 +41,7 @@ export default function Header(props: {
   setDarkMode: (val: boolean) => void;
   darkMode: boolean;
 }) {
-  const basket = useStoreContext()?.basket;
+  const { basket } = useAppSelector((state) => state.basket);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
   const { setDarkMode, darkMode } = props;

@@ -14,28 +14,29 @@ import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
 import BasketPage from "../features/basket/BasketPage";
 import { getCookie } from "../utils/utils";
-import { useStoreContext } from "../context/StoreContext";
 import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 import CheckoutPage from "../features/checkout/CheckoutPage";
+import { useAppDispatch } from "../store/counterStore";
+import { setBasket } from "../features/basket/basketSlice";
 
 function App() {
-  const setBasket = useStoreContext()?.setBasket;
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const palletteType = darkMode ? "dark" : "light";
 
   useEffect(() => {
     const buyerId = getCookie("buyerId");
-    if (buyerId && setBasket) {
+    if (buyerId) {
       agent.Basket.get()
-        .then((basket) => setBasket(basket))
+        .then((basket) => dispatch(setBasket(basket)))
         .catch((err) => console.log(err))
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
-  }, [setBasket]);
+  }, [dispatch]);
 
   const theme = createTheme({
     palette: {
